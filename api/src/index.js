@@ -1,21 +1,22 @@
-const express = require("express");
-const { port, host } = require("./configuration");
-const { connectDb } = require("./helpers/db");
+const express = require('express');
+const {port, host, db} = require("./configuration");
+const {connectDb} = require("./helpers/db");
 
 const app = express();
 
-app.get("/test", (req, res) => {
-  res.send("Our api server is working correctly");
+app.get('/test', (req, res) => {
+    res.send('==> our api server is working fine');
 });
 
 const startServer = () => {
-  app.listen(port, () => {
-    console.log(`Started api service on port ${port}`);
-    console.log(`Our host is ${host}`);
-  });
-};
+    app.listen(port, async () => {
+        console.log(`==> Server api started on port ${port}`);
+        console.log(`==> Our host is ${host}`);
+        console.log(`==> Our db is ${db}`);
+    });
+}
 
 connectDb()
-  .on("error", console.log)
-  .on("disconnected", connectDb)
-  .once("open", startServer);
+    .on("error", console.log)
+    .on("disconnected", connectDb)
+    .once("open", startServer);
