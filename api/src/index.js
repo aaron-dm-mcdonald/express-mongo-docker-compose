@@ -14,16 +14,18 @@ app.get("/test", (req, res) => {
 });
 
 const startServer = () => {
-  app.listen(port, () => {
+  app.listen(port, async () => {
     console.log(`Started api service on port ${port}`);
     console.log(`Our host is ${host}`);
     console.log(`Database url ${db}`);
 
-    const silence = new Kitten({ name: "Silence" });
-    silence.save(function(err, result) {
-      if (err) return console.error(err);
+    try {
+      const silence = new Kitten({ name: "Silence" });
+      const result = await silence.save();  // <-- Fix: Use async/await
       console.log("result", result);
-    });
+    } catch (err) {
+      console.error("Error saving kitten:", err);
+    }
   });
 };
 
