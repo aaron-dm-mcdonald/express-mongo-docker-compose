@@ -16,4 +16,9 @@ services:
   api_db:
     image: mongo:latest
     container_name: api-db
+    volumes:
+      - mongodb_api:/data/db
+
+volumes:
+  mongodb_api:
   
