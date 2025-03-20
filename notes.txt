@@ -1,0 +1,65 @@
+#!groovy
+pipeline {
+   agent any
+   stages {     
+    stage('Dastardly') {
+      agent {         
+       dockerContainer {
+         
+         image 'public.ecr.aws/portswigger/dastardly:latest'         
+     }       
+  }       
+  steps {
+    cleanWs()
+    sh '''
+        docker run --user $(id -u) -v ${WORKSPACE}:${WORKSPACE}:rw \
+        -e BURP_START_URL=https://ginandjuice.shop/ \
+        -e BURP_REPORT_FILE_PATH=${WORKSPACE}/dastardly-report.xml \
+        public.ecr.aws/portswigger/dastardly:latest
+    '''
+}
+     }
+   }
+   post {
+        always {
+            junit testResults: 'dastardly-report.xml', skipPublishingChecks: true
+        }
+    }
+ }
+
+
+ docker run -d --name jenkins \
+    -d --name jenkins --privileged \
+    -p 8080:8080 -p 50000:50000 \
+    -v jenkins_home:/var/jenkins_home \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    --group-add $(stat -c '%g' /var/run/docker.sock) \
+    aaronmcdonald/jenkins-class6:latest
+
+groupadd -g 999 docker
+usermod -aG docker jenkins
+
+stat -c '%g' /var/run/docker.sock
+docker run -d --name jenkins \
+    -p 8080:8080 -p 50000:50000 \
+    -v jenkins_home:/var/jenkins_home \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    --group-add 994 \
+    --privileged \
+    aaronmcdonald/jenkins-class6:latest
+
+
+
+
+1) run jenkins with new command
+2) install "docker" plugin to configure agent
+3) see jenkinsfile 
+4) configure docker agent under clouds in jenkins dashboard -> manage jenkins -> clouds
+5) give Jenkins container permissons to docker.sock 
+  $ docker exec -it jenkins bash
+  $ usermod -aG docker jenkins
+  $ exit
+5) $ docker restart jenkins
+6) test in jenkins container for docker 
+  $ docker exec -it jenkins docker ps
+
