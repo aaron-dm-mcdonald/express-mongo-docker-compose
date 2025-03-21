@@ -1,7 +1,7 @@
 services:
   api:
     build: ./api
-    container_name: api
+    container_name: realworld-api
     command: npm run start
     restart: unless-stopped
     ports:
@@ -13,12 +13,32 @@ services:
     depends_on:
       - api_db
 
+  auth:
+    build: ./auth
+    container_name: realworld-auth
+    command: npm run start
+    restart: unless-stopped
+    ports:
+      - 3002:3002
+    environment:
+      - PORT=3002
+      - HOST=http://realworld.com
+      - MONGO_URL=mongodb://auth_db:27017/auth
+    depends_on:
+      - auth_db
+
   api_db:
     image: mongo:latest
-    container_name: api-db
+    container_name: realworld-api-db
     volumes:
       - mongodb_api:/data/db
 
+  auth_db:
+    image: mongo:latest
+    container_name: realworld-auth-db
+    volumes:
+      - mongodb_auth:/data/db
+
 volumes:
   mongodb_api:
-  
+  mongodb_auth:
