@@ -1,13 +1,25 @@
 services:
+
+  frontend:
+    build: ./frontend
+    container_name: realworld-frontend
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    command: npm run start
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend/src:/usr/src/app/src
   api:
     build: ./api
     container_name: realworld-api
     command: npm run start
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - 3001:3001
     environment:
-      - PORT=3000
+      - PORT=3001
       - HOST=http://realworld.com
       - MONGO_URL=mongodb://api_db:27017/api
     depends_on:
