@@ -4,6 +4,6 @@ server {
     server_name 34.45.55.44;
 
     location / {
-        proxy_pass http://frontend:3000
+        proxy_pass http://frontend:3000;
     }
 }
