@@ -13,6 +13,15 @@ app.get("/test", (req, res) => {
   res.send("Our api server is working correctly");
 });
 
+app.get('testwithcurrentuser', (req, res) => {
+  axios.get(authApiUrl + 'currentUser').then(response => {
+    res.json({
+      testwithcurrentuser: true,
+      currentUserFromAuth: response.data
+    });
+  });
+});
+
 const startServer = () => {
   app.listen(port, async () => {
     console.log(`Started api service on port ${port}`);
