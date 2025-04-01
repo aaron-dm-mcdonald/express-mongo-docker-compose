@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require('axios');
 const mongoose = require("mongoose");
 const { port, host, db, authApiUrl } = require("./configuration");
 const { connectDb } = require("./helpers/db");
