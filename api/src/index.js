@@ -15,7 +15,7 @@ app.get("/test", (req, res) => {
 });
 
 app.get('/testwithcurrentuser', (req, res) => {
-  axios.get(authApiUrl + 'currentUser').then(response => {
+  axios.get(authApiUrl + '/currentUser').then(response => {
     res.json({
       testwithcurrentuser: true,
       currentUserFromAuth: response.data
