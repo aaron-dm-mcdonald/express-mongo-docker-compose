@@ -16,8 +16,8 @@ services:
     container_name: realworld-api
     command: npm run start
     restart: unless-stopped
-    ports:
-      - 3001:3001
+    # ports:
+    #   - 3001:3001
     environment:
       - PORT=3001
       - HOST=http://realworld.com
@@ -31,12 +31,13 @@ services:
     container_name: realworld-auth
     command: npm run start
     restart: unless-stopped
-    # ports:
-    #   - 3002:3002
+    ports:
+      - 3002:3002
     environment:
       - PORT=3002
       - HOST=http://realworld.com
       - MONGO_URL=mongodb://auth_db:27017/auth
+      - API_URL=http://api:3001/api
     depends_on:
       - auth_db
 
