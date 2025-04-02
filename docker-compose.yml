@@ -3,8 +3,8 @@ services:
   frontend:
     build: ./frontend
     container_name: realworld-frontend
-    # ports:
-    #   - 3000:3000
+    ports:
+      - 3000:3000
     restart: unless-stopped
     command: serve -s build -l 3000
     networks:
