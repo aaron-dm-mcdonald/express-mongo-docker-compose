@@ -9,10 +9,7 @@ services:
     command: serve -s build -l 3000
     networks:
       - realworld-network
-    # stdin_open: true
-    # tty: true
-    # volumes:
-    #   - ./frontend/src:/usr/src/app/src
+    
     
   api:
     build: ./api
