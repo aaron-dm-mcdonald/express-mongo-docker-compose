@@ -3,14 +3,16 @@ services:
   frontend:
     build: ./frontend
     container_name: realworld-frontend
-    ports:
-      - 3000:3000
+    # ports:
+    #   - 3000:3000
     restart: unless-stopped
     command: npm run start
     stdin_open: true
     tty: true
     volumes:
       - ./frontend/src:/usr/src/app/src
+    networks:
+      - realworld-network
   api:
     build: ./api
     container_name: realworld-api
@@ -25,6 +27,8 @@ services:
       - AUTH_API_URL=http://auth:3002/api
     depends_on:
       - api_db
+    networks:
+      - realworld-network
 
   auth:
     build: ./auth
@@ -40,18 +44,24 @@ services:
       - API_URL=http://api:3001/api
     depends_on:
       - auth_db
+    networks:
+      - realworld-network
 
   api_db:
     image: mongo:latest
     container_name: realworld-api-db
     volumes:
       - mongodb_api:/data/db
+    networks:
+      - realworld-network
 
   auth_db:
     image: mongo:latest
     container_name: realworld-auth-db
     volumes:
       - mongodb_auth:/data/db
+    networks:
+      - realworld-network
 
   nginx:
     image: nginx:stable-alpine
@@ -62,7 +72,13 @@ services:
       - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
     depends_on: 
       - frontend
+    networks:
+      - realworld-network
 
 volumes:
   mongodb_api:
   mongodb_auth:
+
+networks: 
+  realworld-network:
+    driver: bridge
