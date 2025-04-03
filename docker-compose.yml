@@ -3,8 +3,8 @@ services:
   frontend:
     build: ./frontend
     container_name: realworld-frontend
-    ports:
-      - 3000:3000
+    # ports:
+    #   - 3000:3000
     restart: unless-stopped
     command: serve -s build -l 3000
     networks:
@@ -67,7 +67,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
+      - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/default.conf
     depends_on: 
       - frontend
     networks:
