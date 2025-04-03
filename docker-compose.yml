@@ -1,7 +1,9 @@
 services:
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
     container_name: realworld-frontend
     restart: unless-stopped
     command: serve -s build -l 3000
